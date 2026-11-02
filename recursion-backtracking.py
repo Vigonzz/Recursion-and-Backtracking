@@ -50,7 +50,7 @@ def generate_solutions():
     diag2 = set()
     
     def place_queen(col):
-        """ Tries to place a queen in the given column, calls itself doe the next column"""
+        """ Tries to place a queen in the given column, calls itself for the next column"""
         # base case 
         if col == 8:
             solutions.append(board[:])
@@ -84,11 +84,13 @@ def parse_input(line):
     """ takes a line of text then returns a list of ints """
     parts = line.split()
     positions = []
+    # Conversion
     for part in parts:
         part = int(part)
         positions.append(part)
-        if len(positions) != 8:
-            raise ValueError("input must contain 8 integer")
+    # check length 
+    if len(positions) != 8:
+        raise ValueError("input must contain 8 integer")
     for position in positions:
         if position < 1 or position > 8:
             raise ValueError("The rows must be between 1-8")
@@ -109,10 +111,8 @@ def min_moves(positions, solutions):
 
 # Testing
 
-print(len(generate_solutions()))
-print(generate_solutions()[0])
 # Test our check inclusion function
-print("---Test---")
+print("---Test Task 1---")
 
 print("\n---Test 1---")
 print(check_inclusion("ab", "eidbaooo"))
@@ -135,4 +135,38 @@ print(check_inclusion("aab", "abbab"))
 print("\n---Test 7---")
 print(check_inclusion("a", "b"))
 
+print("\n---Test 8: Repeated Letters---")
 print(check_inclusion("aab", "aaab"))
+
+print("\n---Test Task 2---")
+
+print("\n---Test 1: Diagonal---")
+solutions = generate_solutions()
+test1 = parse_input("1 2 3 4 5 6 7 8")
+print(min_moves(test1, solutions))
+
+print("\n---Test 2: All Queens, Same Row---")
+solutions1 = generate_solutions()
+test2 = parse_input("1 1 1 1 1 1 1 1")
+print(min_moves(test2, solutions1))
+
+print("\n---Test 3: Already Valid---")
+solutions3 = generate_solutions()
+test3 = parse_input("1 5 8 6 3 7 2 4")
+print(min_moves(test3, solutions3))
+
+print("\n---Test 4: One Move form Valid---")
+solutions4 = generate_solutions()
+test4 = parse_input("1 5 8 6 3 7 2 1")
+print(min_moves(test4, solutions4))
+
+print("\n---Test 5: Reverse Diagonal---")
+solutions5 = generate_solutions()
+test5 = parse_input("8 7 6 5 4 3 2 1")
+print(min_moves(test5, solutions5))
+
+print("\n---Test generat sol---")
+print(len(generate_solutions()))
+
+print("\n---Test parse input---")
+print(generate_solutions()[0])
