@@ -38,10 +38,79 @@ def check_inclusion(s1, s2):
         # remove empty counts
         if window[leaving] == 0:
             del window[leaving]
-            if window == need:
-                return True
+        if window == need:
+            return True
     return False
+# Task 2:
+def generate_solutions():
+    board = []
+    solutions = []
+    rows = set()
+    diag1 = set()
+    diag2 = set()
+    
+    def place_queen(col):
+        """ Tries to place a queen in the given column, calls itself doe the next column"""
+        # base case 
+        if col == 8:
+            solutions.append(board[:])
+            return 
+    
+        for row in range(1,9):
+            d1 = row - col
+            d2= row + col
+            if row in rows or d1 in diag1 or d2 in diag2:
+                continue
+            board.append(row)
+            # Place the queen
+            rows.add(row)
+            diag1.add(d1)
+            diag2.add(d2)
 
+            # Go to the next column
+            place_queen(col + 1)
+
+            # undo the placements
+            board.pop()
+            rows.remove(row)
+            diag1.remove(d1)
+            diag2.remove(d2)
+    # Start at the first column
+    place_queen(0)
+    return solutions
+
+# Parse the input 
+def parse_input(line):
+    """ takes a line of text then returns a list of ints """
+    parts = line.split()
+    positions = []
+    for part in parts:
+        part = int(part)
+        positions.append(part)
+        if len(positions) != 8:
+            raise ValueError("input must contain 8 integer")
+    for position in positions:
+        if position < 1 or position > 8:
+            raise ValueError("The rows must be between 1-8")
+    return positions
+
+def min_moves(positions, solutions):
+    """ Find the min moves """
+    best = 8
+    # loop through the solutions 
+    for solution in solutions:
+        moves = 0
+        for col in range(8):
+            if positions[col] != solution[col]:
+                moves += 1
+        if moves < best:
+            best = moves
+    return best
+
+# Testing
+
+print(len(generate_solutions()))
+print(generate_solutions()[0])
 # Test our check inclusion function
 print("---Test---")
 
@@ -65,3 +134,5 @@ print(check_inclusion("aab", "abbab"))
 
 print("\n---Test 7---")
 print(check_inclusion("a", "b"))
+
+print(check_inclusion("aab", "aaab"))
